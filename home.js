@@ -4,6 +4,8 @@
 //
 // Enrollment.where("user_id = ?", 2)
 
+// [0-9]{3}\-[0-9]{2}\-[0-9]{4}
+
 const smallestPowerOf2 = (num) => {
   let currentPow = 2
   while(currentPow < num){
@@ -28,29 +30,41 @@ const hoursToAngle = (hours) => {
   return hours * 30;
 }
 
-const findAlivest = (dateRanges) => {
+const findAlivest = (yearRanges) => {
   let freqs = {};
-  let currentMax = [];
-  currentMax = [dateRanges[0][0], 1];
-  dateRanges.forEach((dateRange) => {
-    let dates = enumerateDates(dateRange);
-    dates.forEach((date) => {
-      freqs[date] = freqs[date] + 1 || 1;
-      if(freqs[date] > currentMax[1]){
-        currentMax[0] = date;
-        currentMax[1] = freqs[date];
+  let currentMax = 1;
+  let mostLivedYears = [];
+  yearRanges.forEach((yearRange) => {
+    let years = enumerateRange(yearRange);
+    years.forEach((year) => {
+      freqs[year] = freqs[year] + 1 || 1;
+      if(freqs[year] > currentMax){
+        currentMax = freqs[year];
       }
     })
   })
-  return currentMax[0]
+
+  moveLivedYears = valueMatch(freqs, currentMax);
+
+  return mostLivedYears;
 }
 
-const enumerateDates = (dateRange) => {
+const valueMatch = (obj, val) => {
   let arr = [];
-  let current = dateRange[0];
-  while(current <= dateRange[1]){
+  Object.keys(obj).forEach((key) => {
+    if(obj[key] === val){
+      returnArr.push(key);
+    }
+  })
+  return arr;
+}
+
+const enumerateRange = (range) => {
+  let arr = [];
+  let current = range[0];
+  while(current <= range[1]){
     arr.push(current);
     current += 1;
   }
-  return arr
+  return arr;
 }
